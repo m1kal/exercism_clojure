@@ -3,11 +3,11 @@
 (defn slices [string n]
   (if (> n (count string)) []
     (if (zero? n) [""]
-      (loop [position 0 result []]
-        (if (> (+ n position) (count string))
+      (loop [substring string result []]
+        (if (> n (count substring))
           result
-          (recur (inc position)
-           (conj result (subs string position (+ n position))))
+          (recur (subs substring 1)
+            (conj result (subs substring 0 n)))
         )
       )
     )
