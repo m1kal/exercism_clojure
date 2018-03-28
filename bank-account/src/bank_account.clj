@@ -1,13 +1,17 @@
 (ns bank-account)
 
 (defn open-account []
-  (atom 0))
+  (atom {:balance 0})
+)
 
 (defn close-account [account]
-  (reset! account nil))
+  (reset! account {})
+)
 
 (defn get-balance [account]
-  @account)
+  (:balance @account)
+)
 
 (defn update-balance [account amount]
-  (swap! account #(+ % amount)))
+  (swap! account assoc :balance (+ (get-balance account) amount))
+)
