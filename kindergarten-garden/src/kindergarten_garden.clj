@@ -7,24 +7,18 @@
 (defn garden
   ([string ] (garden string children))
   ([string students]
-    (let [rows
+    (let [gardens
           (->>
             (clojure.string/split string #"\n")
             (map #(partition 2 %))
             (apply interleave)
             (flatten)
-            (partition 4))
+            (partition 4)
+            (map #(map plants %)))
           students
             (->>
               students
               (sort)
               (map clojure.string/lower-case)
               (mapv keyword))]
-      (loop [output {} position 0]
-        (if
-          (= position (count rows))
-          output
-          (recur
-            (assoc output (students position) (map plants (nth rows position)))
-            (inc position)))))))
-
+      (zipmap students gardens))))
