@@ -5,14 +5,13 @@
 
 (defn- split-to-even-and-odd-subsequences [input]
   (map
-    #(filter identity %)
-    (map
-      #(map
-        %
-        (partition-all
-          2
-          (reverse input)))
-    [first second])))
+    #(->>
+      input
+      reverse
+      (partition-all 2)
+      (map %)
+      (filter identity))
+    [first second]))
 
 (defn double-and-subtract [digit]
   (let [double (* 2 digit)]
@@ -26,12 +25,12 @@
 
 (defn valid? [input]
   (if-let [stripped-input (strip-input input)]
-    (zero?
-      (mod
-        (process-digits
-          (split-to-even-and-odd-subsequences
-            (map
-              read-string
-              (clojure.string/split stripped-input #""))))
-        10))
+    (->
+      stripped-input
+      (clojure.string/split #"")
+      (#(map read-string %))
+      split-to-even-and-odd-subsequences
+      process-digits
+      (mod 10)
+      zero?)
     false))
