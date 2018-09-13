@@ -6,12 +6,15 @@
     (read-string input)
     (+ 10 (- (int (first input)) (int \a)))))
 
+
+(defn- parse-string [input]
+  (->>
+    (clojure.string/split input #"")
+    (map parse-character)
+    (reduce #(+ (* 16 %1) %2) 0)))
+
 (defn hex-to-int [input]
   (if
     (re-matches #"^[\da-f]*$" input)
-    (->>
-      input
-      (#(clojure.string/split % #""))
-      (map parse-character)
-      (reduce #(+ (* 16 %1) %2) 0))
+    (parse-string input)
     0))
