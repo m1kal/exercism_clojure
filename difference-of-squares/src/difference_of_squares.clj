@@ -1,25 +1,14 @@
 (ns difference-of-squares)
 
-(defn- square [number]
-  (* number number))
+(def square #(* % %))
+(def up-to (comp range inc))
 
 (defn sum-of-squares [number]
-  (->>
-    number
-    inc
-    range
-    (map square)
-    (apply +)))
+  (->> number up-to (map square) (apply +)))
 
 (defn square-of-sums [number]
-  (->>
-    number
-    inc
-    range
-    (apply +)
-    square))
+  (->> number up-to (apply +) square))
 
 (defn difference [number]
- (apply - (map #(% number) [square-of-sums sum-of-squares]))
-)
+  (apply - (map #(% number) [square-of-sums sum-of-squares])))
 
